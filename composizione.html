@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronometro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.14.0/css/tachyons.min.css">
+    <style>
+        body {
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        #cronometro {
+            font-size: 72px; /* Grande dimensione per il timer */
+            color: black;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="cronometro" class="tc">Pronto</div>
+    <div>
+        <button id="startButton" class="f6 link dim br3 ba ph3 pv2 mb2 dib dark-gray">Inizia</button>
+        <button id="stopButton" class="f6 link dim br3 ba ph3 pv2 mb2 dib dark-gray" disabled>Ferma</button>
+    </div>
+
+    <script>
+        const display = document.getElementById('cronometro');
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        let countdown;
+        let seconds = 0;
+        let decimi = 0;
+        let timerInterval;
+
+        startButton.addEventListener('click', () => {
+            startButton.disabled = true;
+            stopButton.disabled = false;
+            countdown = 3;
+            display.textContent = countdown;
+
+            const interval = setInterval(() => {
+                countdown--;
+                display.textContent = countdown;
+
+                if (countdown < 0) {
+                    clearInterval(interval);
+                    startCronometro();
+                }
+            }, 1000);
+        });
+
+        stopButton.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            startButton.disabled = false;
+            stopButton.disabled = true;
+            display.textContent = "Pronto"; // Resetta il display
+        });
+
+        function startCronometro() {
+            seconds = 0;
+            decimi = 0;
+            display.textContent = `${seconds}.${decimi}`;
+
+            timerInterval = setInterval(() => {
+                decimi++;
+                if (decimi >= 10) {
+                    decimi = 0;
+                    seconds++;
+                }
+                display.textContent = `${seconds}.${decimi}`;
+            }, 100);
+        }
+    </script>
+</body>
+</html>
